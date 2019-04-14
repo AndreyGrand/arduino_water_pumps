@@ -22,27 +22,27 @@
 
 #define ENCODER_TYPE 1      // тип энкодера (0 или 1). Если энкодер работает некорректно (пропуск шагов), смените тип
 #define DRIVER_VERSION 1    // 0 - маркировка драйвера дисплея кончается на 4АТ, 1 - на 4Т
-#define PUPM_AMOUNT 2       // количество помп, подключенных через реле/мосфет
+#define PUPM_AMOUNT 7       // количество помп, подключенных через реле/мосфет
 #define START_PIN 5         // подключены начиная с пина
 #define SWITCH_LEVEL 1      // реле: 1 - высокого уровня (или мосфет), 0 - низкого
 #define PARALLEL 0          // 1 - параллельный полив, 0 - полив в порядке очереди
 #define TIMER_START 0       // 1 - отсчёт периода с момента ВЫКЛЮЧЕНИЯ помпы, 0 - с момента ВКЛЮЧЕНИЯ помпы
 
-#define PERIOD 0            // 1 - период в часах, 0 - в минутах
+#define PERIOD 1            // 1 - период в часах, 0 - в минутах
 #define PUMPING 1           // 1 - время работы помпы в секундах, 0 - в минутах
 
 #define DROP_ICON 1         // 1 - отображать капельку, 0 - будет буква "t" (time)
 
 // названия каналов управления. БУКВУ L НЕ ТРОГАТЬ БЛЕТ!!!!!!
 static const wchar_t *relayNames[]  = {
-  L"Pump 1",
-  L"Pump 2",
-  L"Pump 3",
+  L"Помпа 1",
+  L"Помпа 2",
+  L"Помпа 3",
   L"Помпа 4",
-  L"Огурцы",
-  L"Помидоры",
-  L"Клубника",
-  L"Папин куст",
+  L"Помпа 5",
+  L"Помпа 6",
+  L"Помпа 7",
+  L"Помпа 8",
 };
 
 #define CLK 2
@@ -140,10 +140,9 @@ void setup() {
   // вывести буквенные подписи
   Serial.println("вывести буквенные подписи");
   lcd.setCursor(1, 0);
-  //lcd.print("Pump #");
   lcd.print(relayNames[0]);
   lcd.setCursor(1, 1);
-  lcd.print("Prd: ");
+  lcd.print("Прод: ");
   lcd.setCursor(10, 1);
   lcd.print("t");
   lcd.print(": ");
@@ -179,6 +178,7 @@ bool PUMP_BTN_CLICKED = false;
 void buttonCheck(){
   bool btn_pressed = digitalRead(PUMP_BTN) == LOW; 
 	if (btn_pressed && !PUMP_BTN_CLICKED){
+    displayOn();
 		PUMP_BTN_CLICKED = true;
 		digitalWrite(pump_pins[current_pump], SWITCH_LEVEL);
    Serial.print("Start pump #");
